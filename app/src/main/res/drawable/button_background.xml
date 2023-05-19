@@ -1,0 +1,11 @@
+<!-- edittext_background.xml -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#03A9F4" /> <!-- 设置为您想要的输入框背景颜色 -->
+    <corners android:radius="60dp" /> <!-- 设置为您想要的圆角半径 -->
+    <padding
+        android:left="8dp"
+        android:top="8dp"
+        android:right="8dp"
+        android:bottom="8dp" /> <!-- 设置输入框内边距 -->
+</shape>
