@@ -7,7 +7,13 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
 
@@ -43,14 +49,16 @@ class LoginActivity : AppCompatActivity() {
     private fun login() {
         val username = usernameEditText.text.toString()
         val password = passwordEditText.text.toString()
-
+        val payload = """
+            {
+                "username": "$username",
+                "password": "$password"
+            }
+        """.trimIndent()
         // 执行登录请求
         val client = OkHttpClient()
         val loginUrl = "http://music.sunnymoom.top/auth/login"
-        val requestBody = FormBody.Builder()
-            .add("username", username)
-            .add("password", password)
-            .build()
+        val requestBody = payload.toRequestBody("application/json".toMediaType())
 
         val request = Request.Builder()
             .url(loginUrl)
@@ -98,7 +106,6 @@ class LoginActivity : AppCompatActivity() {
             }
         })
     }
-
     private fun retryLogin() {
         val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setTitle("登录失败")
