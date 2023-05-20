@@ -8,6 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var etUsername: EditText
@@ -49,11 +52,52 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    val navidromeUrl = "http://music.sunnymoom.top"
+
     private fun isValidCredentials(username: String, password: String): Boolean {
         // 在此处验证用户名和密码的逻辑
-        // 您可以根据实际需求自定义验证逻辑，例如调用 Navidrome 的 API 进行验证
-        // 返回 true 表示验证通过，返回 false 表示验证失败
-        return username.isNotEmpty() && password.isNotEmpty()
+        val client = OkHttpClient()
+
+        val loginUrl = "$navidromeUrl/auth/login"
+        val requestBody = FormBody.Builder()
+            .add("username", username)
+            .add("password", password)
+            .build()
+
+        val request = Request.Builder()
+            .url(loginUrl)
+            .post(requestBody)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseData = response.body?.string()
+
+                if (response.isSuccessful && responseData != null) {
+                    val jsonObject = JSONObject(responseData)
+                    val token = jsonObject.getString("token")
+
+                    // 在此处处理返回的 JSON 数据
+                    // 您可以根据需要提取所需的值并执行相应的操作
+
+                    // 例如，将 token 保存到 SharedPreferences 或全局变量中供后续使用
+                    // sharedPreferences.edit().putString("token", token).apply()
+                    // 或者将其他值传递给登录后的主界面
+                    // navigateToHome(jsonObject)
+                } else {
+                    // 处理登录失败的情况
+                    // 在此处显示错误消息或执行其他操作
+                }
+            }
+        })
+
+        // 由于请求是异步的，因此无法立即返回验证结果
+        // 在此处可以返回默认值（例如 false），或者不返回任何值，具体取决于您的需求
+        return false
     }
 
     private fun saveLoginStatus(username: String) {
