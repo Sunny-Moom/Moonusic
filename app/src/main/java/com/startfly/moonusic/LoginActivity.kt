@@ -2,63 +2,51 @@ package com.startfly.moonusic
 
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var etUsername: EditText
-    private lateinit var etPassword: EditText
-    private lateinit var btnLogin: Button
-    private lateinit var tvRegister: TextView
 
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var usernameEditText: EditText
+    private lateinit var passwordEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        etUsername = findViewById(R.id.etUsername)
-        etPassword = findViewById(R.id.etPassword)
-        btnLogin = findViewById(R.id.btnLogin)
-        tvRegister = findViewById(R.id.tvRegister)
-
+        // 初始化 SharedPreferences
         sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE)
 
-        btnLogin.setOnClickListener {
-            val username = etUsername.text.toString()
-            val password = etPassword.text.toString()
+        // 初始化视图
+        usernameEditText = findViewById(R.id.etUsername)
+        passwordEditText = findViewById(R.id.etPassword)
+        val loginButton: Button = findViewById(R.id.btnLogin)
+        loginButton.setOnClickListener { login() }
 
-            if (isValidCredentials(username, password)) {
-                // 登录成功，保存登录状态
-                saveLoginStatus(username)
-                // 跳转到主页或其他目标页面
-                navigateToHome()
-            } else {
-                // 登录失败，显示错误消息
-                Toast.makeText(this, "无效的用户名或密码", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        tvRegister.setOnClickListener {
-            // 跳转到注册页面
-            navigateToRegister()
+        // 检查是否存在存储的用户名和密码
+        val storedUsername = sharedPreferences.getString("username", "")
+        val storedPassword = sharedPreferences.getString("password", "")
+        if (!storedUsername.isNullOrEmpty() && !storedPassword.isNullOrEmpty()) {
+            usernameEditText.setText(storedUsername)
+            passwordEditText.setText(storedPassword)
+            login()
         }
     }
 
-    val navidromeUrl = "http://music.sunnymoom.top"
+    private fun login() {
+        val username = usernameEditText.text.toString()
+        val password = passwordEditText.text.toString()
 
-    private fun isValidCredentials(username: String, password: String): Boolean {
-        // 在此处验证用户名和密码的逻辑
+        // 执行登录请求
         val client = OkHttpClient()
-
-        val loginUrl = "$navidromeUrl/auth/login"
+        val loginUrl = "http://music.sunnymoom.top/auth/login"
         val requestBody = FormBody.Builder()
             .add("username", username)
             .add("password", password)
@@ -71,7 +59,10 @@ class LoginActivity : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-
+                // 登录请求失败的处理逻辑
+                runOnUiThread {
+                    retryLogin()
+                }
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -80,47 +71,50 @@ class LoginActivity : AppCompatActivity() {
                 if (response.isSuccessful && responseData != null) {
                     val jsonObject = JSONObject(responseData)
                     val token = jsonObject.getString("token")
+                    val name = jsonObject.getString("name")
+                    val subsonicSalt = jsonObject.getString("subsonicSalt")
+                    val subsonicToken = jsonObject.getString("subsonicToken")
 
-                    // 在此处处理返回的 JSON 数据
-                    // 您可以根据需要提取所需的值并执行相应的操作
+                    // 保存用户名和密码到 SharedPreferences
+                    sharedPreferences.edit()
+                        .putString("username", username)
+                        .putString("password", password)
+                        .apply()
 
-                    // 例如，将 token 保存到 SharedPreferences 或全局变量中供后续使用
-                    // sharedPreferences.edit().putString("token", token).apply()
-                    // 或者将其他值传递给登录后的主界面
-                    // navigateToHome(jsonObject)
+                    // 跳转到主界面，并传递相关数据
+                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                    intent.putExtra("token", token)
+                    intent.putExtra("name", name)
+                    intent.putExtra("subsonicSalt", subsonicSalt)
+                    intent.putExtra("subsonicToken", subsonicToken)
+                    startActivity(intent)
+                    finish()
                 } else {
-                    // 处理登录失败的情况
-                    // 在此处显示错误消息或执行其他操作
+                    // 登录失败的处理逻辑
+                    runOnUiThread {
+                        retryLogin()
+                    }
                 }
             }
         })
-
-        // 由于请求是异步的，因此无法立即返回验证结果
-        // 在此处可以返回默认值（例如 false），或者不返回任何值，具体取决于您的需求
-        return false
     }
 
-    private fun saveLoginStatus(username: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString("username", username)
-        editor.putBoolean("isLoggedIn", true)
-        editor.apply()
-    }
-
-    private fun navigateToHome() {
-        // 跳转到主页或其他目标页面的逻辑
-        // 您可以根据您的应用设计进行相应的跳转
-        // 以下是一个示例代码，用于跳转到名为 HomeActivity 的主页
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
-    private fun navigateToRegister() {
-        // 跳转到注册页面的逻辑
-        // 您可以根据您的应用设计进行相应的跳转
-        // 以下是一个示例代码，用于跳转到名为 RegisterActivity 的注册页面
-        val intent = Intent(this, RegisterActivity::class.java)
-        startActivity(intent)
+    private fun retryLogin() {
+        val dialogBuilder = AlertDialog.Builder(this)
+        dialogBuilder.setTitle("登录失败")
+        dialogBuilder.setMessage("请重新输入用户名和密码")
+        dialogBuilder.setPositiveButton("确定") { dialog, _ ->
+            // 清除 SharedPreferences 中的用户名和密码
+            sharedPreferences.edit()
+                .remove("username")
+                .remove("password")
+                .apply()
+            // 清空输入框
+            usernameEditText.text = null
+            passwordEditText.text = null
+            dialog.dismiss()
+        }
+        dialogBuilder.setCancelable(false)
+        dialogBuilder.show()
     }
 }
