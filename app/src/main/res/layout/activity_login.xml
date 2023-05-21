@@ -21,14 +21,17 @@
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="74dp"
-        android:hint="用户名" />
+        android:hint="用户名"
+        android:inputType="text"
+        android:imeOptions="actionNext"/>
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="74dp"
         android:hint="密码"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:imeOptions="actionDone"/>
 
     <Button
         android:id="@+id/btnLogin"
