@@ -1,4 +1,3 @@
 package com.startfly.moonusic
 
-class RegisterActivity {
-}
+class RegisterActivity

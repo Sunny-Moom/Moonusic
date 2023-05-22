@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_output"
+        android:icon="@drawable/baseline_output_24"
+        android:title="登出" />
+
+</menu>
