@@ -17,7 +17,7 @@
         android:src="@drawable/ic_launcher_foreground"
         android:scaleType="centerCrop"
         android:layout_marginBottom="24dp"
-        android:transitionName="shared_element_transition" />
+        android:transitionName="shareImage" />
 
     <EditText
         android:id="@+id/etUsername"

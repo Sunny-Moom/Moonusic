@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- 定义您的主题样式 -->
+        <item name="android:windowActivityTransitions">true</item>
     </style>
 </resources>
