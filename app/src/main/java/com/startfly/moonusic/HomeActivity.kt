@@ -13,7 +13,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class HomeActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val searchFragment = SearchFragment()
-    private val musicFragment = MusicFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -32,8 +31,6 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.navigation_music -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_fragment_container, musicFragment).commit()
                     true
                 }
                 R.id.navigation_search -> {

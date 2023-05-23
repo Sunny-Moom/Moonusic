@@ -12,12 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        >
+        android:usesCleartextTraffic="true">
+        <service
+            android:name=".Music"
+            android:enabled="true"
+            android:exported="true"></service>
 
-        <activity android:name=".LoginActivity"
-            android:theme="@style/NoActionBar"
-            android:exported="true">
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true"
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,9 +29,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".HomeActivity" />
-
-        <!-- 添加其他活动声明和服务声明等 -->
-
     </application>
 
 </manifest>

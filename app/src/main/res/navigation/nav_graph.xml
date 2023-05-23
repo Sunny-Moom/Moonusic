@@ -16,10 +16,4 @@
         android:label="搜索"
         tools:layout="@layout/fragment_search" />
 
-    <fragment
-        android:id="@+id/musicFragment"
-        android:name="com.startfly.moonusic.MusicFragment"
-        android:label="音乐"
-        tools:layout="@layout/fragment_music" />
-
 </navigation>

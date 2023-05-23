@@ -14,8 +14,8 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints">
 
-        <ImageView
-            android:id="@+id/ivSearch"
+        <ImageButton
+            android:id="@+id/ibSearch"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
