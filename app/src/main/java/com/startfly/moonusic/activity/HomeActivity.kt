@@ -1,4 +1,4 @@
-package com.startfly.moonusic
+package com.startfly.moonusic.activity
 
 
 import android.content.Intent
@@ -9,6 +9,9 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.startfly.moonusic.fragment.HomeFragment
+import com.startfly.moonusic.R
+import com.startfly.moonusic.fragment.SearchFragment
 
 class HomeActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()

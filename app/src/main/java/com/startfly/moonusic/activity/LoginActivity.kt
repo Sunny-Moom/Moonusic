@@ -1,14 +1,18 @@
-package com.startfly.moonusic
+package com.startfly.moonusic.activity
 
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
+import com.startfly.moonusic.R
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
@@ -26,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var shareImage1:ImageView
+    private lateinit var loginButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +42,10 @@ class LoginActivity : AppCompatActivity() {
         // 初始化视图
         usernameEditText = findViewById(R.id.etUsername)
         passwordEditText = findViewById(R.id.etPassword)
-        val loginButton: Button = findViewById(R.id.btnLogin)
+        loginButton= findViewById(R.id.btnLogin)
+        val registerTextview:TextView =findViewById(R.id.tvRegister)
         loginButton.setOnClickListener { login() }
+        registerTextview.setOnClickListener{register()}
 
         // 检查是否存在存储的用户名和密码
         val storedUsername = sharedPreferences.getString("username", "")
@@ -49,7 +56,18 @@ class LoginActivity : AppCompatActivity() {
             login()
         }
     }
-
+    private fun register(){
+        val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+        shareImage1=findViewById(R.id.logo)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            this@LoginActivity,
+            Pair(shareImage1,"shareImage"),
+            Pair(usernameEditText,"shareText1"),
+            Pair(passwordEditText,"shareText2"),
+            Pair(loginButton,"shareButton")
+        )
+        startActivity(intent, options.toBundle())
+    }
     private fun login() {
         val username = usernameEditText.text.toString()
         val password = passwordEditText.text.toString()

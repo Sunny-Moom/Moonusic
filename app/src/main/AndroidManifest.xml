@@ -13,13 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <service
-            android:name=".Music"
-            android:enabled="true"
-            android:exported="true"></service>
-
         <activity
-            android:name=".LoginActivity"
+            android:name=".activity.LoginActivity"
             android:exported="true"
             android:theme="@style/NoActionBar">
             <intent-filter>
@@ -28,7 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".activity.HomeActivity" />
+        <activity android:name=".activity.RegisterActivity"
+            android:parentActivityName=".activity.LoginActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+            android:value=".activity.LoginActivity" />
+        </activity>
     </application>
 
 </manifest>
