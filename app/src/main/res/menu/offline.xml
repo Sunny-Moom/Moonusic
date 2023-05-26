@@ -4,5 +4,9 @@
         android:id="@+id/navigation_output"
         android:icon="@drawable/baseline_output_24"
         android:title="登出" />
+    <item
+        android:id="@+id/navigation_exit"
+        android:icon="@drawable/baseline_power_settings_new_24"
+        android:title="退出" />
 
 </menu>

@@ -3,6 +3,7 @@ package com.startfly.moonusic.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.UserManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -12,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.startfly.moonusic.fragment.HomeFragment
 import com.startfly.moonusic.R
 import com.startfly.moonusic.fragment.SearchFragment
+import com.startfly.moonusic.tools.UserMiss
 
 class HomeActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
@@ -21,10 +23,13 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         var shareImage: ImageView = findViewById(R.id.logo)
         ViewCompat.setTransitionName(shareImage, "shareImage")
-        val token = intent.getStringExtra("token")
-        val name = intent.getStringExtra("name")
-        val subsonicSalt = intent.getStringExtra("subsonicSalt")
-        val subsonicToken = intent.getStringExtra("subsonicToken")
+        UserMiss.username= intent.getStringExtra("username").toString()
+        UserMiss.password = intent.getStringExtra("password").toString()
+        UserMiss.token = intent.getStringExtra("token").toString()
+        UserMiss.name = intent.getStringExtra("name").toString()
+        UserMiss.subsonicSalt = intent.getStringExtra("subsonicSalt").toString()
+        UserMiss.subsonicToken = intent.getStringExtra("subsonicToken").toString()
+
         val navigationView = findViewById<BottomNavigationView>(R.id.bottom_view)
         navigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -66,6 +71,10 @@ class HomeActivity : AppCompatActivity() {
                 val intent = Intent(this@HomeActivity, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
+                return true
+            }
+            R.id.navigation_exit->{
+                System.exit(0)
                 return true
             }
 

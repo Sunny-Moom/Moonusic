@@ -113,6 +113,8 @@ class LoginActivity : AppCompatActivity() {
 
                     // 跳转到主界面，并传递相关数据
                     val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                    intent.putExtra("username", username)
+                    intent.putExtra("password", password)
                     intent.putExtra("token", token)
                     intent.putExtra("name", name)
                     intent.putExtra("subsonicSalt", subsonicSalt)
