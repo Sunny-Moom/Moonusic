@@ -4,7 +4,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 class Seturl {
 
-    fun setUrl(username:String,password:String,params: Map<String, String>,api:String): String {
+    fun setUrl(username:String, password:String, params: Map<String, String> = emptyMap(), api:String): String {
         val tk= GetToken(password)
         val salt=tk.salt
         val token=tk.token
@@ -21,7 +21,7 @@ class Seturl {
         tokenMap=tokenMap.plus(params)
         return buildUrlWithParams(url,tokenMap)
     }
-    private fun buildUrlWithParams(url: String, params: Map<String, String>): String {
+    fun buildUrlWithParams(url: String, params: Map<String, String>): String {
         val httpUrl = url.toHttpUrlOrNull()?.newBuilder()
         params.forEach { (key, value) -> httpUrl?.addQueryParameter(key, value) }
         return httpUrl?.build().toString()

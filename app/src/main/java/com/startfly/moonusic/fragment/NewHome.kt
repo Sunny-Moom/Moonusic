@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.executor.GlideExecutor
 import com.bumptech.glide.signature.ObjectKey
 import com.startfly.moonusic.R
 import com.startfly.moonusic.net.Seturl
@@ -20,13 +19,11 @@ import com.startfly.moonusic.tools.UserMiss
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.concurrent.Executor
 
 
 class NewHome : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MyAdapter
-    var myExecutor: Executor = GlideExecutor.newUnlimitedSourceExecutor()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,23 +32,15 @@ class NewHome : Fragment() {
         val rootView=inflater.inflate(R.layout.home_new, container, false)
         GlobalScope.launch(Dispatchers.Main) {
             val songList = NewAlbumld().GetNewAlbumld()
-            recyclerView=rootView.findViewById(R.id.recyclerView)
+            recyclerView=rootView.findViewById(R.id.albumView)
             recyclerView.layoutManager = LinearLayoutManager(activity)
-            for (i in 0 until songList.size){
-                val url = Seturl().setUrl(UserMiss.username,UserMiss.password, params = mapOf("id" to "al-"+songList[i].albumId, "size" to "200"),"getCoverArt")
-                val signature = ObjectKey(songList[i].albumId)
-                Glide.with(this@NewHome)
-                    .load(url)
-                    .signature(signature)
-                    .preload()
-            }
             adapter= MyAdapter(songList)
             recyclerView.adapter=adapter
         }
         return rootView
     }
 
-    class MyAdapter(private val dataList: List<Song>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+    private class MyAdapter(private val dataList: List<Song>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.item_music, parent, false)
@@ -65,7 +54,7 @@ class NewHome : Fragment() {
 
         override fun getItemCount() = dataList.size
 
-        class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             private val songNameTextView: TextView = itemView.findViewById(R.id.songNameTextView)
             private val artistNameTextView: TextView = itemView.findViewById(R.id.artistNameTextView)
             private val albumNameTextView: TextView = itemView.findViewById(R.id.albumNameTextView)

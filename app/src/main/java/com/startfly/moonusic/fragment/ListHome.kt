@@ -14,5 +14,6 @@ class ListHome : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.home_list, container, false)
+
     }
 }
