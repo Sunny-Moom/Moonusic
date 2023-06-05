@@ -42,6 +42,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.navigation_search -> {
+                    UserMiss.searchtxt=""
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_fragment_container, searchFragment).commit()
                     true

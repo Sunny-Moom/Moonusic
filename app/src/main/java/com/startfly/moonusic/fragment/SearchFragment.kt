@@ -45,7 +45,9 @@ class SearchFragment : Fragment() {
             backtop=rootView.findViewById(R.id.resetButton)
             recyclerView = rootView.findViewById(R.id.searchView)
             recyclerView.layoutManager = LinearLayoutManager(activity)
-            val songList = SearchMusic().SearchAllMusic("",1)
+            searchText=rootView.findViewById(R.id.etSearch)
+            searchText.setText(UserMiss.searchtxt)
+            val songList = SearchMusic().SearchAllMusic(UserMiss.searchtxt,1)
             adapter = MyAdapter(songList)
             recyclerView.adapter = adapter
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -83,18 +85,22 @@ class SearchFragment : Fragment() {
         searchText.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 执行你想要的操作
+                UserMiss.searchtxt=searchText.text.toString()
                 resetData(searchText.text.toString())
                 return@setOnKeyListener true
             }
             return@setOnKeyListener false
         }
         loadMoreButton.setOnClickListener {
+            UserMiss.searchtxt=searchText.text.toString()
             loadMoreData(searchText.text.toString())
         }
         resetButton.setOnClickListener {
+            UserMiss.searchtxt=searchText.text.toString()
             resetData(searchText.text.toString())
         }
         seachButton.setOnClickListener {
+            UserMiss.searchtxt=searchText.text.toString()
             resetData(searchText.text.toString())
         }
     }

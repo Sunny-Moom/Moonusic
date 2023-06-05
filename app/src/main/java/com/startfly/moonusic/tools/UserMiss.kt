@@ -9,5 +9,6 @@ class UserMiss {
         lateinit var name:String
         lateinit var subsonicSalt:String
         lateinit var subsonicToken:String
+        var searchtxt:String=" "
     }
 }

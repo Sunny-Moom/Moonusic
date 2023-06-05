@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
 import com.startfly.moonusic.R
+import com.startfly.moonusic.activity.HomeActivity
 import com.startfly.moonusic.net.Seturl
 import com.startfly.moonusic.tools.NewAlbumld
 import com.startfly.moonusic.tools.UserMiss
@@ -39,6 +40,7 @@ class NewHome : Fragment() {
         }
         return rootView
     }
+
 
     private class MyAdapter(private val dataList: List<Song>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
@@ -76,7 +78,13 @@ class NewHome : Fragment() {
                     .load(url)
                     .signature(signature)
                     .into(imageView)
-                playButton.setOnClickListener { /*处理播放按钮点击事件*/ }
+                val searchFragment = SearchFragment()
+                playButton.setOnClickListener {
+                    UserMiss.searchtxt=data.albumName
+                    val activity = itemView.context as HomeActivity
+                    activity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_container, searchFragment).commit()
+                }
             }
         }
     }

@@ -2,5 +2,6 @@
 <resources>
     <color name="colorAccent">#03A9F4</color>
     <color name="mainColor">#F1EBF5</color>
+    <color name="sckk">#E8DEF8</color>
     <!-- 设置为您想要的按钮背景颜色 -->
 </resources>
