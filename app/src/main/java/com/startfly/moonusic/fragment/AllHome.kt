@@ -26,18 +26,18 @@ class AllHome : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MyAdapter
     private lateinit var progressBar: ProgressBar
-    private lateinit var more:ImageView
-    private lateinit var backtop:ImageView
+    private lateinit var more: ImageView
+    private lateinit var backtop: ImageView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView=inflater.inflate(R.layout.home_all, container, false)
+        val rootView = inflater.inflate(R.layout.home_all, container, false)
         GlobalScope.launch(Dispatchers.Main) {
             progressBar = rootView.findViewById(R.id.musicAllBar)
-            more=rootView.findViewById(R.id.loadMoreButton)
-            backtop=rootView.findViewById(R.id.resetButton)
+            more = rootView.findViewById(R.id.loadMoreButton)
+            backtop = rootView.findViewById(R.id.resetButton)
             recyclerView = rootView.findViewById(R.id.musicAllView)
             recyclerView.layoutManager = LinearLayoutManager(activity)
             val songList = AllMusic().GetAllMusic(1)
@@ -53,9 +53,9 @@ class AllHome : Fragment() {
                     if (lastVisibleItemPosition == totalItemCount - 1 && dy > 0) { // 判断是否滚动到底部
                         more.visibility = View.VISIBLE
                         backtop.visibility = View.VISIBLE
-                    }else{
+                    } else {
                         more.visibility = View.GONE
-                        backtop.visibility=View.GONE
+                        backtop.visibility = View.GONE
                     }
                 }
             })
@@ -63,6 +63,7 @@ class AllHome : Fragment() {
         }
         return rootView
     }
+
     private fun loadMoreData() {
         GlobalScope.launch(Dispatchers.Main) {
             // 根据当前页码和每页数据量获取新数据
@@ -70,6 +71,7 @@ class AllHome : Fragment() {
             adapter.loadMoreData(newDataList) // 将新数据添加到Adapter中
         }
     }
+
     private fun setupButtonListeners(rootView: View) {
         val loadMoreButton: ImageView = rootView.findViewById(R.id.loadMoreButton)
         val resetButton: ImageView = rootView.findViewById(R.id.resetButton)
@@ -97,13 +99,16 @@ class AllHome : Fragment() {
         return AllMusic().GetAllMusic(page)
         // 并返回数据列表
     }
-    private class MyAdapter(private val dataList: MutableList<MusicAll>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+
+    private class MyAdapter(private val dataList: MutableList<MusicAll>) :
+        RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
         private var currentPage = 1 // 当前页码
         private val pageSize = 10 // 每页数据量
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_music, parent, false)
+            val view =
+                LayoutInflater.from(parent.context).inflate(R.layout.item_music, parent, false)
             return MyViewHolder(view)
         }
 
@@ -137,9 +142,11 @@ class AllHome : Fragment() {
         fun getPageSize(): Int {
             return pageSize // 获取每页数据量
         }
+
         private class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             private val songNameTextView: TextView = itemView.findViewById(R.id.songNameTextView)
-            private val artistNameTextView: TextView = itemView.findViewById(R.id.artistNameTextView)
+            private val artistNameTextView: TextView =
+                itemView.findViewById(R.id.artistNameTextView)
             private val albumNameTextView: TextView = itemView.findViewById(R.id.albumNameTextView)
             private val imageView: ImageView = itemView.findViewById(R.id.imageView)
             private val playButton: ImageView = itemView.findViewById(R.id.playButton)
@@ -148,13 +155,14 @@ class AllHome : Fragment() {
                 songNameTextView.text = data.MusicName
                 artistNameTextView.text = data.ArtistName
                 albumNameTextView.text = data.AlbumName
-                val idMap= mapOf(
-                    "id" to "al-"+data.AlbumId,
+                val idMap = mapOf(
+                    "id" to "al-" + data.AlbumId,
                     "size" to "200"
                 )
                 val signature = ObjectKey(data.AlbumId)
-                val url = Seturl().setUrl(UserMiss.username, UserMiss.password,idMap,"getCoverArt")
-                val context: Context =itemView.context
+                val url =
+                    Seturl().setUrl(UserMiss.username, UserMiss.password, idMap, "getCoverArt")
+                val context: Context = itemView.context
                 Glide.with(context)
                     .load(url)
                     .signature(signature)
@@ -163,6 +171,7 @@ class AllHome : Fragment() {
             }
         }
     }
+
     data class MusicAll(
         val MusicName: String,
         val MusicId: String,

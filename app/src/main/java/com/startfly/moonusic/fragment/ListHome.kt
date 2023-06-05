@@ -13,7 +13,8 @@ class ListHome : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.home_list, container, false)
+        val rootView= inflater.inflate(R.layout.home_list, container, false)
 
+        return rootView
     }
 }
