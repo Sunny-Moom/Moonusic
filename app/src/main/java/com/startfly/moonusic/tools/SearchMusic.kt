@@ -17,10 +17,10 @@ class SearchMusic {
             "x-nd-authorization" to "Bearer "+UserMiss.token
         )
         val params = mapOf(
-            "_end" to ((page+1)*10).toString(),
+            "_end" to (page*10).toString(),
             "_order" to "ASC",
             "_sort" to "title",
-            "_start" to (page*10).toString(),
+            "_start" to ((page-1)*10).toString(),
             "title" to search
         )
         val songList = mutableListOf<AllHome.MusicAll>()

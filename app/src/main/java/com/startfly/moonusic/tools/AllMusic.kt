@@ -18,10 +18,10 @@ class AllMusic {
             "x-nd-authorization" to "Bearer "+UserMiss.token
         )
         val params = mapOf(
-            "_end" to ((page+1)*10).toString(),
+            "_end" to (page*10).toString(),
             "_order" to "ASC",
             "_sort" to "random",
-            "_start" to (page*10).toString()
+            "_start" to ((page-1)*10).toString()
         )
         val songList = mutableListOf<MusicAll>()
         val url = Seturl().buildUrlWithParams(UserMiss.url+"api/song",params)
