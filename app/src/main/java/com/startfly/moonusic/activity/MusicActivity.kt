@@ -1,6 +1,9 @@
 package com.startfly.moonusic.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
@@ -11,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.startfly.moonusic.ExoPlayerService
 import com.startfly.moonusic.R
 import com.startfly.moonusic.fragment.MusicFragment
 import com.startfly.moonusic.fragment.MusicListFragment
@@ -31,12 +35,21 @@ class MusicActivity : AppCompatActivity()  {
         val adapter = FragmentAdapter(supportFragmentManager)
         adapter.addFragment(MusicFragment(), "播放")
         adapter.addFragment(MusicListFragment(), "音乐列表")
-        supportActionBar?.title = "Music"
+        supportActionBar?.title =HomeActivity().exoPlayerServiceManager.getPlayNow()?.MusicName
         // 设置 Adapter
         viewPager.adapter = adapter
 
         // 配置 TabLayout
         tabLayout.setupWithViewPager(viewPager)
+        val playbackStateChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == ExoPlayerService.ACTION_PLAYBACK_STATE_CHANGED) {
+                    supportActionBar?.title =HomeActivity().exoPlayerServiceManager.getPlayNow()?.MusicName
+                }
+            }
+        }
+        val filter = IntentFilter(ExoPlayerService.ACTION_PLAYBACK_STATE_CHANGED)
+        registerReceiver(playbackStateChangeReceiver, filter)
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

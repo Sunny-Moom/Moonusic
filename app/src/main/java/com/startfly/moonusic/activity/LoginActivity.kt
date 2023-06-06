@@ -98,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 val responseData = response.body.string()
 
-                if (response.isSuccessful && responseData != null) {
+                if (response.isSuccessful) {
                     val jsonObject = JSONObject(responseData)
                     val token = jsonObject.getString("token")
                     val name = jsonObject.getString("name")

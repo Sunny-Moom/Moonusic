@@ -3,7 +3,6 @@ package com.startfly.moonusic.net
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 class Seturl {
-
     fun setUrl(username:String, password:String, params: Map<String, String> = emptyMap(), api:String): String {
         val tk= GetToken(password)
         val salt=tk.salt
@@ -15,7 +14,7 @@ class Seturl {
             "t" to token,
             "s" to salt,
             "v" to "1.13.0",
-            "c" to "test",
+            "c" to "Moonusic",
             "f" to  "json"
         )
         tokenMap=tokenMap.plus(params)

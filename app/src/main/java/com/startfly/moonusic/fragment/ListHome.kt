@@ -11,8 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.startfly.moonusic.R
+import com.startfly.moonusic.activity.HomeActivity
 import com.startfly.moonusic.tools.AllMusic
+import com.startfly.moonusic.tools.GetListMusic
 import com.startfly.moonusic.tools.ListMusic
+import com.startfly.moonusic.tools.SetMediaItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -147,13 +150,18 @@ class ListHome : Fragment() {
             private val playButton: ImageView = itemView.findViewById(R.id.playButton)
 
             fun bind(data: MusicList) {
-                println(data.ListId)
                 songNameTextView.text = data.ListName
                 artistNameTextView.text = data.OwnerName
                 albumNameTextView.text = data.SongCount+"首"
                 val drawable = itemView.resources.getDrawable(R.drawable.baseline_play_circle_outline_24)
                 imageView.setImageDrawable(drawable)
-                playButton.setOnClickListener { /*处理播放按钮点击事件*/ }
+                playButton.setOnClickListener {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        val item = GetListMusic().getMusiclst(data.ListId)
+                        HomeActivity().exoPlayerServiceManager.setPlaylist(SetMediaItem().setmediaitem(item))
+                        HomeActivity().exoPlayerServiceManager.play()
+                    }
+                }
             }
         }
     }

@@ -112,12 +112,14 @@
         app:layout_constraintTop_toBottomOf="@+id/seek_bar"
         tools:ignore="MissingConstraints" >
         <ImageView
+            android:id="@+id/iv_play"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible"
             android:src="@drawable/baseline_play_arrow_24"
             />
         <ImageView
+            android:id="@+id/iv_pause"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
@@ -139,6 +141,7 @@
         tools:ignore="MissingConstraints">
 
         <ImageView
+            android:id="@+id/iv_previous"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/baseline_skip_previous_24" />
@@ -156,6 +159,7 @@
         app:layout_constraintTop_toBottomOf="@+id/seek_bar"
         tools:ignore="MissingConstraints" >
         <ImageView
+            android:id="@+id/iv_next"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/baseline_skip_next_24"
