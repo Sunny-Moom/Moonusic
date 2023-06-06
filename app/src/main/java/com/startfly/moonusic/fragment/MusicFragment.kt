@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +54,7 @@ class MusicFragment: Fragment() {
         // 注册广播接收器
         val filter = IntentFilter(ExoPlayerService.ACTION_PLAYBACK_STATE_CHANGED)
         activity?.registerReceiver(playbackStateChangeReceiver, filter)
+
         musicimg=rootView.findViewById(R.id.music_img)
         artistname=rootView.findViewById(R.id.artist_name)
         albumname=rootView.findViewById(R.id.album_name)
@@ -63,7 +65,9 @@ class MusicFragment: Fragment() {
         ivpause=rootView.findViewById(R.id.iv_pause)
         ivprevious=rootView.findViewById(R.id.iv_previous)
         ivnext=rootView.findViewById(R.id.iv_next)
+
         updateUI()
+
         ivplay.setOnClickListener {
             HomeActivity().exoPlayerServiceManager.play()
         }
@@ -76,11 +80,26 @@ class MusicFragment: Fragment() {
         ivnext.setOnClickListener {
             HomeActivity().exoPlayerServiceManager.musicNext()
         }
+        // 为进度条设置监听器
+        seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                // 更新当前播放进度的显示
+                musiccur.text = formatTime(progress.toLong())
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                // 将进度条的当前进度设置为当前播放进度
+                HomeActivity().exoPlayerServiceManager.seekTo(seekBar.progress.toLong())
+            }
+        })
+        startUpdateSeekBar()
         return rootView
     }
     override fun onDestroyView() {
         super.onDestroyView()
-
+        stopUpdateSeekBar()
         // 在销毁Fragment视图时取消广播接收器的注册
         activity?.unregisterReceiver(playbackStateChangeReceiver)
     }
@@ -91,7 +110,6 @@ class MusicFragment: Fragment() {
         if (nnnPlay?.MusicName != null){
             val idMap = mapOf(
                 "id" to "al-" + nnnPlay.AlbumId,
-                "size" to "200"
             )
             val signature = ObjectKey(nnnPlay.AlbumId)
             val url =
@@ -109,6 +127,50 @@ class MusicFragment: Fragment() {
                 ivplay.visibility=View.VISIBLE
                 ivpause.visibility=View.GONE
             }
+            // 更新进度条
+            val duration = HomeActivity().exoPlayerServiceManager.getDuration()
+            musiclength.text = formatTime(duration)
+            seekbar.max = duration.toInt()
+            seekbar.progress = HomeActivity().exoPlayerServiceManager.getCurrentPosition().toInt()
+        }
+    }
+    private val handler = Handler()
+    private val updateSeekBarRunnable = object : Runnable {
+        override fun run() {
+            // 更新进度条
+            SeekBarUpdata()
+
+            // 延迟1秒后再次执行
+            handler.postDelayed(this, 1000)
+        }
+    }
+    private fun SeekBarUpdata(){
+        // 更新进度条
+        val duration = HomeActivity().exoPlayerServiceManager.getDuration()
+        val currentPosition = HomeActivity().exoPlayerServiceManager.getCurrentPosition()
+        val progress = currentPosition.toInt()
+        musiclength.text = formatTime(duration)
+        seekbar.max = duration.toInt()
+        seekbar.progress = progress
+        musiccur.text = formatTime(currentPosition)
+    }
+    // 启动定时更新进度条
+    private fun startUpdateSeekBar() {
+        handler.postDelayed(updateSeekBarRunnable, 1000)
+    }
+    // 停止定时更新进度条
+    private fun stopUpdateSeekBar() {
+        handler.removeCallbacks(updateSeekBarRunnable)
+    }
+    // 将毫秒数转换为"时:分:秒"格式的字符串
+    private fun formatTime(time: Long): String {
+        val hour = time / 3600000
+        val minute = (time - hour * 3600000) / 60000
+        val second = (time - hour * 3600000 - minute * 60000) / 1000
+        return if (hour > 0) {
+            String.format("%02d:%02d:%02d", hour, minute, second)
+        } else {
+            String.format("%02d:%02d", minute, second)
         }
     }
 }

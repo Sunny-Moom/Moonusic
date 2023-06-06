@@ -86,6 +86,9 @@ class ExoPlayerService : Service() {
         exoPlayer.setMediaSource(concatenatingMediaSource)
         exoPlayer.prepare()
     }
+    fun getDuration(): Long {
+        return exoPlayer.duration
+    }
 
     // 设置播放列表并跳转到指定位置
     fun setPlaylistWithPosition(mediaItems: List<MediaItem>) {
@@ -108,6 +111,9 @@ class ExoPlayerService : Service() {
             mediaSourceFactory.createMediaSource(mediaItem)
         )
         exoPlayer.prepare()
+    }
+    fun seekTo(long:Long){
+        exoPlayer.seekTo(long)
     }
 
     // 获取播放进度

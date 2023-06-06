@@ -45,7 +45,17 @@ object ExoPlayerServiceManager {
             exoPlayerService.setPlaylist(mediaItems)
         }
     }
-
+    fun getDuration(): Long {
+        return exoPlayerService.getDuration()
+    }
+    fun getCurrentPosition(): Long {
+        return exoPlayerService.getPlaybackProgress()
+    }
+    fun seekTo(long:Long){
+        if (serviceBound) {
+            exoPlayerService.seekTo(long)
+        }
+    }
     fun insertNext(mediaItem: MediaItem) {
         if (serviceBound) {
             exoPlayerService.insertNext(mediaItem)

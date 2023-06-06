@@ -11,8 +11,8 @@
         android:id="@+id/artist_name"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
         android:gravity="center"
         android:text="艺术家"
         android:textSize="18sp"
@@ -25,14 +25,13 @@
         android:id="@+id/album_name"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="36dp"
+        android:layout_marginStart="12dp"
         android:gravity="center"
         android:text="专辑"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/artist_name"
         tools:ignore="MissingConstraints" />
 
     <androidx.cardview.widget.CardView
@@ -40,7 +39,7 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_gravity="center"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="140dp"
         app:cardCornerRadius="125dp"
         app:cardElevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +64,7 @@
         android:layout_marginTop="80dp"
         android:elevation="4dp"
         android:padding="16dp"
-        android:progressDrawable="@drawable/seekbar"
+        android:progressDrawable="@drawable/sb_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,21 +109,21 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seek_bar"
-        tools:ignore="MissingConstraints" >
+        tools:ignore="MissingConstraints">
+
         <ImageView
             android:id="@+id/iv_play"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
             android:src="@drawable/baseline_play_arrow_24"
-            />
+            android:visibility="visible" />
+
         <ImageView
             android:id="@+id/iv_pause"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:src="@drawable/baseline_pause_24"
-            />
+            android:visibility="gone" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -157,13 +156,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardView2"
         app:layout_constraintTop_toBottomOf="@+id/seek_bar"
-        tools:ignore="MissingConstraints" >
+        tools:ignore="MissingConstraints">
+
         <ImageView
             android:id="@+id/iv_next"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/baseline_skip_next_24"
-            />
+            android:src="@drawable/baseline_skip_next_24" />
     </androidx.cardview.widget.CardView>
 
 

@@ -27,6 +27,7 @@ import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.navigation.NavigationView
 import com.startfly.moonusic.fragment.AllHome.MusicAll
 import com.startfly.moonusic.net.Seturl
+import com.startfly.moonusic.tools.Keep
 
 class HomeActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
@@ -98,6 +99,7 @@ class HomeActivity : AppCompatActivity() {
                             .into(shareImage)
                         navigationView.menu.findItem(R.id.navigation_music).title=nnnPlay.MusicName
                     }
+                    Keep().keep(HomeActivity().exoPlayerServiceManager.getPlaybackMediaId().toString())
                 }
             }
         }
