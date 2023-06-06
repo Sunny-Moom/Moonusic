@@ -33,8 +33,8 @@ class MusicActivity : AppCompatActivity()  {
 
         // 创建 FragmentAdapter
         val adapter = FragmentAdapter(supportFragmentManager)
-        adapter.addFragment(MusicFragment(), "播放")
-        adapter.addFragment(MusicListFragment(), "音乐列表")
+        adapter.addFragment(MusicFragment(),"")
+        adapter.addFragment(MusicListFragment(),"")
         supportActionBar?.title =HomeActivity().exoPlayerServiceManager.getPlayNow()?.MusicName
         // 设置 Adapter
         viewPager.adapter = adapter

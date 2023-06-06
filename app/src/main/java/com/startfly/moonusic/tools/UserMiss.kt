@@ -1,5 +1,7 @@
 package com.startfly.moonusic.tools
 
+import com.startfly.moonusic.fragment.AllHome.MusicAll
+
 class UserMiss {
     companion object{
         var url="http://music.sunnymoom.top/"
@@ -10,5 +12,6 @@ class UserMiss {
         lateinit var subsonicSalt:String
         lateinit var subsonicToken:String
         var searchtxt:String=" "
+        var mzklist:MutableList<MusicAll> = mutableListOf<MusicAll>()
     }
 }

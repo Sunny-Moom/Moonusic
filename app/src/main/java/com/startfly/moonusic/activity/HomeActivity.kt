@@ -4,30 +4,28 @@ package com.startfly.moonusic.activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.startfly.moonusic.ExoPlayerService
 import com.startfly.moonusic.R
 import com.startfly.moonusic.fragment.HomeFragment
 import com.startfly.moonusic.fragment.SearchFragment
+import com.startfly.moonusic.net.Seturl
 import com.startfly.moonusic.server.ExoPlayerServiceManager
+import com.startfly.moonusic.tools.Keep
 import com.startfly.moonusic.tools.MusicList
 import com.startfly.moonusic.tools.UserMiss
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import android.content.IntentFilter
-import com.bumptech.glide.Glide
-import com.bumptech.glide.signature.ObjectKey
-import com.google.android.material.navigation.NavigationView
-import com.startfly.moonusic.fragment.AllHome.MusicAll
-import com.startfly.moonusic.net.Seturl
-import com.startfly.moonusic.tools.Keep
 
 class HomeActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
