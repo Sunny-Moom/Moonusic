@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.startfly.moonusic.fragment.HomeFragment
@@ -29,7 +31,10 @@ class HomeActivity : AppCompatActivity() {
         UserMiss.name = intent.getStringExtra("name").toString()
         UserMiss.subsonicSalt = intent.getStringExtra("subsonicSalt").toString()
         UserMiss.subsonicToken = intent.getStringExtra("subsonicToken").toString()
-
+        shareImage.setOnClickListener {
+            val intent = Intent(this@HomeActivity, MusicActivity::class.java)
+            startActivity(intent)
+        }
         val navigationView = findViewById<BottomNavigationView>(R.id.bottom_view)
         navigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
