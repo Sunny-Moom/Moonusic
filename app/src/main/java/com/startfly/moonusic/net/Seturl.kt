@@ -1,5 +1,6 @@
 package com.startfly.moonusic.net
 
+import com.startfly.moonusic.tools.UserMiss
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 class Seturl {
@@ -7,7 +8,7 @@ class Seturl {
         val tk= GetToken(password)
         val salt=tk.salt
         val token=tk.token
-        val smurl="http://music.sunnymoom.top/rest/"
+        val smurl=UserMiss.url+"rest/"
         val url=smurl+api
         var tokenMap= mapOf<String,String>(
             "u" to username,

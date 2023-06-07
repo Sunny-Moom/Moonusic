@@ -12,6 +12,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.startfly.moonusic.R
 import com.startfly.moonusic.net.RequestHelper
+import com.startfly.moonusic.tools.UserMiss
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var usernameEditText: EditText
@@ -49,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
         val admpw = "Aa114514"
         fun registerssh() {
             request.post(
-                "http://music.sunnymoom.top/api/user",
+                UserMiss.url+"api/user",
                 headers = mapOf("accept" to "application/json", "x-nd-authorization" to admtoken),
                 json = "{\"isAdmin\": false, \"userName\": \"$username\", \"name\": \"$username\", \"password\": \"$password\"}"
             ) { result ->
@@ -60,7 +61,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
         request.post(
-            "http://music.sunnymoom.top/auth/login",
+            UserMiss.url+"auth/login",
             json = "{\"username\": \"$admus\",\"password\":\"$admpw\"}"
         ) { result ->
             result.fold(

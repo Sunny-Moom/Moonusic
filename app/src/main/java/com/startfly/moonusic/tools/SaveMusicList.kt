@@ -9,7 +9,7 @@ class SaveMusicList {
         val tk= GetToken(UserMiss.password)
         val salt=tk.salt
         val token=tk.token
-        val smurl="http://music.sunnymoom.top/rest/"
+        val smurl=UserMiss.url+"rest/"
         val url=smurl+"savePlayQueue.view"
         var tokenMap= mapOf<String,String>(
             "u" to UserMiss.username,

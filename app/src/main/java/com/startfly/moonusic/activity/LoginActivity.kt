@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import com.startfly.moonusic.R
+import com.startfly.moonusic.tools.UserMiss
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
@@ -78,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
         """.trimIndent()
         // 执行登录请求
         val client = OkHttpClient()
-        val loginUrl = "http://music.sunnymoom.top/auth/login"
+        val loginUrl = UserMiss.url+"auth/login"
         val requestBody = payload.toRequestBody("application/json".toMediaType())
 
         val request = Request.Builder()
