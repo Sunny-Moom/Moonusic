@@ -23,6 +23,7 @@ import com.startfly.moonusic.activity.HomeActivity
 import com.startfly.moonusic.fragment.AllHome.MusicAll
 import com.startfly.moonusic.net.Seturl
 import com.startfly.moonusic.tools.AllMusic
+import com.startfly.moonusic.tools.MusicLists
 import com.startfly.moonusic.tools.SearchMusic
 import com.startfly.moonusic.tools.SetMediaItem
 import com.startfly.moonusic.tools.UserMiss
@@ -37,6 +38,7 @@ class SearchFragment : Fragment() {
     private lateinit var more: ImageView
     private lateinit var backtop: ImageView
     private lateinit var searchText:EditText
+    private var btt:Boolean=true
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,8 +52,15 @@ class SearchFragment : Fragment() {
             recyclerView = rootView.findViewById(R.id.searchView)
             recyclerView.layoutManager = LinearLayoutManager(activity)
             searchText=rootView.findViewById(R.id.etSearch)
+            if (UserMiss.searchtxt.contains("#")) {
+                println(1)
+                UserMiss.searchtxt=UserMiss.searchtxt.replace("#", "")
+                btt=false
+            } else {
+                btt=true
+            }
             searchText.setText(UserMiss.searchtxt)
-            val songList = SearchMusic().SearchAllMusic(UserMiss.searchtxt,1)
+            val songList = getSearch(UserMiss.searchtxt,1,btt)
             adapter = MyAdapter(songList)
             recyclerView.adapter = adapter
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -73,6 +82,13 @@ class SearchFragment : Fragment() {
             setupButtonListeners(rootView)
         }
         return rootView
+    }
+    private suspend fun getSearch(st:String, pg:Int, bl:Boolean=true): MutableList<MusicAll> {
+        if (bl){
+            return SearchMusic().SearchAllMusic(st,pg)
+        }else{
+            return MusicLists().GetMusicListss(st,pg)
+        }
     }
     private fun loadMoreData(scText: String) {
         GlobalScope.launch(Dispatchers.Main) {
@@ -119,7 +135,7 @@ class SearchFragment : Fragment() {
 
     private suspend fun getDataList(page: Int, pageSize: Int,scText:String=""): List<MusicAll> {
         // 根据页码和每页数据量从服务器或本地数据库获取数据
-        return SearchMusic().SearchAllMusic(scText,page)
+        return getSearch(scText,page,btt)
         // 并返回数据列表
     }
     private class MyAdapter(private val dataList: MutableList<MusicAll>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {

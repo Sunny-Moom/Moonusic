@@ -21,11 +21,7 @@ import com.startfly.moonusic.fragment.SearchFragment
 import com.startfly.moonusic.net.Seturl
 import com.startfly.moonusic.server.ExoPlayerServiceManager
 import com.startfly.moonusic.tools.Keep
-import com.startfly.moonusic.tools.MusicList
 import com.startfly.moonusic.tools.UserMiss
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
@@ -43,12 +39,6 @@ class HomeActivity : AppCompatActivity() {
         UserMiss.name = intent.getStringExtra("name").toString()
         UserMiss.subsonicSalt = intent.getStringExtra("subsonicSalt").toString()
         UserMiss.subsonicToken = intent.getStringExtra("subsonicToken").toString()
-        GlobalScope.launch(Dispatchers.Main) {
-            MusicList().getPlayerList { songList, nowplay, playtime ->
-                exoPlayerServiceManager.setPlaylist(songList)
-                exoPlayerServiceManager.musicJump(nowplay)
-            }
-        }
         shareImage.setOnClickListener {
             val intent = Intent(this@HomeActivity, MusicActivity::class.java)
             startActivity(intent)

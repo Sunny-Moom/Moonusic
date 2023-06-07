@@ -17,6 +17,7 @@ import com.startfly.moonusic.tools.GetListMusic
 import com.startfly.moonusic.tools.Keep
 import com.startfly.moonusic.tools.ListMusic
 import com.startfly.moonusic.tools.SetMediaItem
+import com.startfly.moonusic.tools.UserMiss
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -156,6 +157,13 @@ class ListHome : Fragment() {
                 albumNameTextView.text = data.SongCount+"首"
                 val drawable = itemView.resources.getDrawable(R.drawable.baseline_play_circle_outline_24)
                 imageView.setImageDrawable(drawable)
+                imageView.setOnClickListener {
+                    val searchFragment = SearchFragment()
+                    UserMiss.searchtxt="#"+data.ListId
+                    val activity = itemView.context as HomeActivity
+                    activity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_container, searchFragment).commit()
+                }
                 playButton.setOnClickListener {
                     GlobalScope.launch(Dispatchers.Main) {
                         val item = GetListMusic().getMusiclst(data.ListId)
