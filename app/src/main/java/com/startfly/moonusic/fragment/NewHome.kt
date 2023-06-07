@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.MediaMetadata
 import com.startfly.moonusic.R
 import com.startfly.moonusic.activity.HomeActivity
 import com.startfly.moonusic.net.Seturl
 import com.startfly.moonusic.tools.NewAlbumld
+import com.startfly.moonusic.tools.SetMediaItem
 import com.startfly.moonusic.tools.UserMiss
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -79,11 +82,32 @@ class NewHome : Fragment() {
                     .signature(signature)
                     .into(imageView)
                 val searchFragment = SearchFragment()
-                playButton.setOnClickListener {
+                imageView.setOnClickListener {
                     UserMiss.searchtxt=data.albumName
                     val activity = itemView.context as HomeActivity
                     activity.supportFragmentManager.beginTransaction()
                         .replace(R.id.main_fragment_container, searchFragment).commit()
+                }
+                playButton.setOnClickListener {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        val ndata=NewAlbumld().SetNewAlbumld(data.albumId)
+                        for (i in 0 until ndata.size){
+                            HomeActivity().exoPlayerServiceManager.insertNext(
+                                MediaItem.Builder()
+                                    .setUri(SetMediaItem().getSong(ndata[i].MusicId))
+                                    .setMediaMetadata(
+                                        MediaMetadata.Builder()
+                                            .setTitle(ndata[i].MusicName)
+                                            .setArtist(ndata[i].ArtistName)
+                                            .setAlbumTitle(ndata[i].AlbumName)
+                                            .setAlbumArtist(ndata[i].AlbumId)
+                                            .build()
+                                    )
+                                    .setMediaId(ndata[i].MusicId)
+                                    .build()
+                            )
+                        }
+                    }
                 }
             }
         }
