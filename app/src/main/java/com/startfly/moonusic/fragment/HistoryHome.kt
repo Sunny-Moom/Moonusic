@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.MediaMetadata
 import com.startfly.moonusic.R
+import com.startfly.moonusic.activity.HomeActivity
 import com.startfly.moonusic.net.Seturl
 import com.startfly.moonusic.tools.UserMiss
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +24,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import com.startfly.moonusic.fragment.AllHome.MusicAll
 import com.startfly.moonusic.tools.HistoryMusic
+import com.startfly.moonusic.tools.SetMediaItem
 
 class HistoryHome : Fragment() {
     private lateinit var recyclerView: RecyclerView
@@ -166,7 +170,36 @@ class HistoryHome : Fragment() {
                     .load(url)
                     .signature(signature)
                     .into(imageView)
-                playButton.setOnClickListener { /*处理播放按钮点击事件*/ }
+                imageView.setOnClickListener {
+                    HomeActivity().exoPlayerServiceManager.insertNext(
+                        MediaItem.Builder()
+                            .setUri(SetMediaItem().getSong(data.MusicId))
+                            .setMediaMetadata(
+                                MediaMetadata.Builder()
+                                    .setTitle(data.MusicName)
+                                    .setArtist(data.ArtistName)
+                                    .setAlbumTitle(data.AlbumName)
+                                    .setAlbumArtist(data.AlbumId)
+                                    .build()
+                            )
+                            .setMediaId(data.MusicId)
+                            .build(),true)
+                }
+                playButton.setOnClickListener {
+                    HomeActivity().exoPlayerServiceManager.insertNext(
+                        MediaItem.Builder()
+                            .setUri(SetMediaItem().getSong(data.MusicId))
+                            .setMediaMetadata(
+                                MediaMetadata.Builder()
+                                    .setTitle(data.MusicName)
+                                    .setArtist(data.ArtistName)
+                                    .setAlbumTitle(data.AlbumName)
+                                    .setAlbumArtist(data.AlbumId)
+                                    .build()
+                            )
+                            .setMediaId(data.MusicId)
+                            .build())
+                }
             }
         }
     }

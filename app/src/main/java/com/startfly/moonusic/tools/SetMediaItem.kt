@@ -26,7 +26,7 @@ class SetMediaItem {
         }
         return songList
     }
-    private fun getSong(id: String): String {
+    fun getSong(id: String): String {
         val idMap= mapOf(
             "id" to id
         )

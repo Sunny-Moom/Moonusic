@@ -16,10 +16,11 @@ import com.startfly.moonusic.ExoPlayerService
 import com.startfly.moonusic.R
 import com.startfly.moonusic.activity.HomeActivity
 import com.startfly.moonusic.fragment.AllHome.MusicAll
+import com.startfly.moonusic.tools.UserMiss
 
 class MusicListFragment : Fragment() {
     private lateinit var adapter: ArrayAdapter<String>
-    private lateinit var musiclst:List<MusicAll>
+    private var musiclst:List<MusicAll>? = null
     private val playbackStateChangeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == ExoPlayerService.ACTION_PLAYBACK_STATE_CHANGED) {
@@ -37,47 +38,49 @@ class MusicListFragment : Fragment() {
         // 注册广播接收器
         val filter = IntentFilter(ExoPlayerService.ACTION_PLAYBACK_STATE_CHANGED)
         activity?.registerReceiver(playbackStateChangeReceiver, filter)
-        musiclst = HomeActivity().exoPlayerServiceManager.getPlaylist()!!
+        musiclst = HomeActivity().exoPlayerServiceManager.getPlaylist()
         val listView = rootView.findViewById<ListView>(R.id.listView)
+        if (musiclst!=null) {
+            // 创建适配器
+            adapter = object : ArrayAdapter<String>(
+                requireContext(),
+                android.R.layout.simple_list_item_1,
+                musiclst!!.map { it.MusicName }
+            ) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getView(position, convertView, parent)
 
-        // 创建适配器
-        adapter = object : ArrayAdapter<String>(
-            requireContext(),
-            android.R.layout.simple_list_item_1,
-            musiclst.map { it.MusicName }
-        ){
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getView(position, convertView, parent)
+                    // 获取当前项的MusicAll对象
+                    val music = musiclst!![position]
 
-                // 获取当前项的MusicAll对象
-                val music = musiclst[position]
+                    // 判断当前项是否为正在播放的音乐
+                    val isCurrentlyPlaying =
+                        music.MusicId == HomeActivity().exoPlayerServiceManager.getPlaybackMediaId()
 
-                // 判断当前项是否为正在播放的音乐
-                val isCurrentlyPlaying = music.MusicId == HomeActivity().exoPlayerServiceManager.getPlaybackMediaId()
-
-                // 设置高亮效果
-                if (isCurrentlyPlaying) {
-                    // 设置高亮样式，比如改变背景色或者字体颜色等
-                    view.setBackgroundColor(Color.parseColor("#E8DEF8"))
-                } else {
-                    // 恢复默认样式
-                    view.setBackgroundColor(Color.parseColor("#F1EBF5"))
+                    // 设置高亮效果
+                    if (isCurrentlyPlaying) {
+                        // 设置高亮样式，比如改变背景色或者字体颜色等
+                        view.setBackgroundColor(Color.parseColor("#E8DEF8"))
+                    } else {
+                        // 恢复默认样式
+                        view.setBackgroundColor(Color.parseColor("#F1EBF5"))
+                    }
+                    return view
                 }
-                return view
             }
-        }
 
-        // 设置适配器
-        listView.adapter = adapter
+            // 设置适配器
+            listView.adapter = adapter
 
-        // 设置ListView的点击事件监听器
-        listView.setOnItemClickListener { parent, view, position, id ->
-            // 处理项点击事件
-            val selectedMusic = musiclst[position]
-            // 在这里可以根据需要执行相应的操作，比如跳转到播放界面或者显示详细信息等
-            HomeActivity().exoPlayerServiceManager.musicJump(selectedMusic.MusicId)
-            // selectedMusic变量包含了被点击项的MusicAll对象
+            // 设置ListView的点击事件监听器
+            listView.setOnItemClickListener { parent, view, position, id ->
+                // 处理项点击事件
+                val selectedMusic = musiclst!![position]
+                // 在这里可以根据需要执行相应的操作，比如跳转到播放界面或者显示详细信息等
+                HomeActivity().exoPlayerServiceManager.musicJump(selectedMusic.MusicId)
+                // selectedMusic变量包含了被点击项的MusicAll对象
 
+            }
         }
 
         return rootView
@@ -89,6 +92,7 @@ class MusicListFragment : Fragment() {
     }
     fun updateMusicList() {
         musiclst = HomeActivity().exoPlayerServiceManager.getPlaylist()!!
+        UserMiss.mzklist= musiclst as MutableList<MusicAll>
         // 刷新适配器
         requireActivity().runOnUiThread {
             adapter.notifyDataSetChanged()

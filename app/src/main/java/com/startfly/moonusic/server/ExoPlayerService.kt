@@ -3,6 +3,7 @@ package com.startfly.moonusic
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
+import android.os.Handler
 import android.os.IBinder
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.MediaItem
@@ -103,16 +104,47 @@ class ExoPlayerService : Service() {
     }
 
     // 在当前媒体项后插入媒体项
-    fun insertNext(mediaItem: MediaItem) {
-        val currentIndex = exoPlayer.currentWindowIndex
-        val nextIndex = currentIndex + 1
-        concatenatingMediaSource.addMediaSource(
-            nextIndex,
-            mediaSourceFactory.createMediaSource(mediaItem)
-        )
-        exoPlayer.prepare()
+    fun insertNext(mediaItem: MediaItem,bl:Boolean) {
+        var cc:Boolean=true
+        val mediaItemCount = concatenatingMediaSource.size
+        for (i in 0 until mediaItemCount) {
+            val mediaItemx = concatenatingMediaSource.getMediaSource(i).mediaItem
+            if (mediaItemx.mediaId == mediaItem.mediaId) {
+                exoPlayer.seekTo(i, 0)
+                cc=false
+                break
+            }
+        }
+        if (cc){
+            if (concatenatingMediaSource.size==0){
+                setPlaylist(mutableListOf<MediaItem>(mediaItem))
+                play()
+            }else{
+                if (bl){
+                    val currentIndex = exoPlayer.currentWindowIndex
+                    val nextIndex = currentIndex + 1
+                    concatenatingMediaSource.addMediaSource(nextIndex, mediaSourceFactory.createMediaSource(mediaItem))
+                    exoPlayer.prepare()
+                    Handler().postDelayed({
+                        if (concatenatingMediaSource.getSize() > nextIndex && concatenatingMediaSource.getMediaSource(nextIndex).mediaItem.mediaId == mediaItem.mediaId) {
+                            exoPlayer.seekTo(nextIndex, 0)
+                            exoPlayer.play()
+                        }
+                    }, 1000)
+                }
+                else{
+                    val currentIndex = exoPlayer.currentWindowIndex
+                    val nextIndex = currentIndex + 1
+                    concatenatingMediaSource.addMediaSource(
+                        nextIndex,
+                        mediaSourceFactory.createMediaSource(mediaItem)
+                    )
+                    exoPlayer.prepare()
+                }
+            }
+        }
     }
-    fun seekTo(long:Long){
+    fun seekTok(long:Long){
         exoPlayer.seekTo(long)
     }
 

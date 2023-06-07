@@ -8,6 +8,8 @@ import com.startfly.moonusic.fragment.AllHome.MusicAll
 import android.os.IBinder
 import com.google.android.exoplayer2.MediaItem
 import com.startfly.moonusic.ExoPlayerService
+import com.startfly.moonusic.tools.SaveMusicList
+import com.startfly.moonusic.tools.UserMiss
 
 
 object ExoPlayerServiceManager {
@@ -53,17 +55,20 @@ object ExoPlayerServiceManager {
     }
     fun seekTo(long:Long){
         if (serviceBound) {
-            exoPlayerService.seekTo(long)
+            exoPlayerService.seekTok(long)
         }
     }
-    fun insertNext(mediaItem: MediaItem) {
+    @Synchronized
+    fun insertNext(mediaItem: MediaItem,bl:Boolean=false) {
         if (serviceBound) {
-            exoPlayerService.insertNext(mediaItem)
+            exoPlayerService.insertNext(mediaItem, bl)
         }
     }
     fun getPlayZt(): Boolean {
         return exoPlayerService.getPlayZt()
     }
+
+    @Synchronized
     fun musicJump(mediaId:String){
         if (serviceBound){
             exoPlayerService.jumpToMediaItem(mediaId)
