@@ -15,7 +15,7 @@ class NewAlbumld {
     suspend fun GetNewAlbumld(): MutableList<Song> = withContext(Dispatchers.IO) {
         val params = mapOf(
             "type" to "newest",
-            "size" to "20"
+            "size" to "40"
         )
         val songList = mutableListOf<Song>()
         val url = Seturl().setUrl(UserMiss.username, UserMiss.password, params, "getAlbumList2")

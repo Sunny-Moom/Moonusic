@@ -58,14 +58,13 @@ class MusicActivity : AppCompatActivity()  {
                 onBackPressed()
                 return true
             }
-
             else -> return super.onOptionsItemSelected(item)
         }
     }
     override fun onBackPressed() {
         // 创建一个新的Intent，将其设置为FLAG_ACTIVITY_REORDER_TO_FRONT标志，
         // 然后使用startActivity()方法启动新的Activity，以返回到上一个Activity。
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this@MusicActivity, HomeActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
         startActivity(intent)
     }
